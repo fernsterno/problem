@@ -1,0 +1,29 @@
+version: '2'
+services:
+    db:
+      build: ./mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: "Db1234"
+      volumes:
+        - localhost:/var/lib/mysql
+      ports:
+        - "3306:3306"
+    php:
+      build: ./php
+      ports:
+        - '80:80'
+      volumes:
+        - ./html:/var/www/html
+        - ./apache/:/var/log/apache2/
+      links:
+        - db
+      depends_on:
+        - db
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - '81:80'
+        environment:
+            MYSQL_ROOT_PASSWORD: "Db1234"
+volumes:
+  localhost:    
